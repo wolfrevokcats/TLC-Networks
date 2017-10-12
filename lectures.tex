@@ -1,0 +1,75 @@
+\chapter{Internet}
+The Internet is a global system of interconnected computer networks that use the standard Internet
+protocol suite (TCP/IP) to serve several billion users worldwide. We can refer to it as a \textit{Network of Networks}.
+\section{Overview}
+\begin{itemize}
+\item 1961-64: Leonard Kleinrock, a brilliant MIT student, proves that packet switching is very efficient in presence of bursty traffic
+\item 1967: Lawrence Roberts $\rightarrow$ Interface Message Processor (IMP): 
+\begin{equation}
+\begin{cases}
+\text{Aim} \rightarrow \text{Interconnect \textbf{heterogeneous host computers through special nodes}}\\
+\text{Fundation} \rightarrow \text{Advanced Research Projects Agency (ARPA)}
+\end{cases}
+\end{equation}
+(ARPA) $\in$ Department Of Defense (DoD) of USA $\rightarrow$ dawn of ARPAnet
+\item 1969: ARPANET is up and running
+\begin{equation}
+\begin{cases}
+\text{4 nodes}\rightarrow \text{UCLA, UCSB, Stanford Research Inst. (SRI), Utha Univ.}\\
+\text{One single protocol} \rightarrow \text{Network Control Protocol (NCP): RFC 001} 
+\end{cases}
+\end{equation}
+The first telnet from UCLA to SRI crashes the system$\rightarrow$dawn of the demo effect
+\item 1970: ALOHAnet $\rightarrow$ A wireless network to interconnect campuses of Hawaii islands
+\item 1970-1980: proliferation of different (\textbf{not interconnected) heterogeneous networks}
+\item 1972: Vint Cerf $\&$ Bob Kahn advance the idea of using special devices, called \textit{Gateway,} to interconnect heterogeneous networks
+\begin{itemize}
+\item Issues: different packet sizes, interfaces, transmit rates, reliability $\rightarrow$ mess
+\item Gateways act as \textbf{universal translator} between heterogeneous networks
+\end{itemize}
+\item A reliable transport protocol, called \textit{Transmission Control Protocol} $\rightarrow$ 
+\begin{equation}
+\begin{cases}
+\text{manage \textbf{e2e communications} over such a heterogeneous mix of networks}\\
+\textbf{\text{TCP shifts the burden of error control and}}\\\text{\textbf{recovery from IMP to end hosts}}
+\end{cases}
+\end{equation}
+$\Rightarrow$This is the key for the Internet scalability
+\item 1977: ARPANET, ALOHANET, Packet Radio network are interconnected as ARPA Internet
+
+$\rightarrow$ Cerf and Kahn proposed to split TCP into TCP $\&$ IP
+\item 1981: UNIX includes the TCP/IP protocols
+\item 1983: ARPANET (with more than 200 nodes) replaces NCP with TCP/IP 
+\item National Science Foundation funded CSNET to link computer science departments
+across the country and connects to ARPANET through TCP/IP
+\item 1983: Birth of the \textit{Domain Name Server (DNS)} system
+\item 1990: ARPANET is decommissioned
+\item 1994 NFSNET is decommissioned
+\textbf{\item 1995: the INTERNET becomes fully commercial}
+\item Today, more than 40,000 networks are interconnected by means of TCP/IP
+protocols... 40 years back by Cerf and Kahn (ah.. golden ’70!)
+\end{itemize}
+
+\section{Internet Service Provider (ISP)}
+\begin{itemize}
+\item Inside of a ISP
+\begin{itemize}
+\item Huge network (company) that collects other smaller ones
+\item 2 types of Gateways: special devices to interconnect heterogeneous networks
+\begin{equation}
+\begin{cases}
+IG \rightarrow \text{Internal Gateway}\\
+EG \rightarrow \text{Exterior Gateway}
+\end{cases}
+\end{equation}
+\end{itemize}
+\item ISPs are connected in a quasi "hierarchical" manner
+\begin{equation}
+\begin{cases}
+\text{ National ISP} \stackrel{Physical Link}{\longrightarrow} EG \in \text{$\{$Regional ISPs, Local ISPs$\}$}\\
+\text{ Regional ISPs} \stackrel{Logical Link}{\longrightarrow}
+\end{cases}
+\end{equation}
+\end{itemize}
+
+
