@@ -1,0 +1,444 @@
+\chapter{Data Link Layer}
+\section{DLL}
+Data Link Layer is the link-layer counterpart of Transmission Control Protocols (TCP) and provides several services as we discuss in the following subsection.
+\subsection{Services}
+The services performed by DLL are:
+\begin{enumerate}
+\item \textit{Link-Layer connection} set up/teardown
+\item \textit{Logical link} set up $\rightarrow$ \textit{Exchange control messages} for negotiation of logical link characteristics
+\item \emph{Synchronization} $\rightarrow$ \textbf{Division of the bit stream provided by PHY layer in characters and frames}
+\item \emph{Segmentation and Reassembly} of upper layer Information Units $\Rightarrow$ Suitable MAC frame units
+\item \textit{Flow Control} $\rightarrow$ Not necessarily provided
+\item \textit{Error Control }$\rightarrow$ Not necessarily provided
+\item \textit{Medium Access Control} $\rightarrow$ Not necessarily provided
+\end{enumerate}
+
+\emph{Example 1:} DLL has to recognize there is another Bluetooth device in the network. To do so it has to find  the \emph{signature} corresponding to that particular device that is needed in order to communicate.
+
+In Bluetooth every node change the transmission frequency at every packet according to a certain pattern and \textbf{this pattern depends on the device}.
+
+In order to set up a communication between two devices is has to be performed a procedure that allow them both to share the same pattern. All of these operations are performed by the Data Link Layer. 
+
+\emph{Example 2:} Ethernet technology 
+
+Medium Access Control is needed when there are multiple nodes that use the same link (Wi-Fi)
+
+\subsection{Addressing}
+
+The different layer define different addressing spaces and that are defined basing on the specific purpose of that layer.
+
+Ethernet and Bluetooth could have the same mac address, is it a problem? In the IP layer there can't be two host with the same address but the addresses need to be unique within the scope of the layer. Bl and Et speaks different languages so they don't collide wit each other.
+
+Each network interface cards in the world have different mac addresses
+
+\section{ARP}
+\subsection{IP encapsulation}
+
+Pag. 6) The source and the destination belong at the same net so there's no need of routing $\Rightarrow$ In this case the hosts have the same prefixes. 
+
+ARP table where for every possible IP address in the same local net maintain the same local address of the host
+
+Pag. 8) The source and the destination IP address belong to the source and the ultimate node itself, but the MAC destination address is the MAC address of the router in the first communication
+
+TE MAC ADDRESS HAS A POINT-TO-POINT SCOPE
+
+The IP datagram becomes the payload at the physical layer
+
+\subsection{Address Resolution Protocol}
+\paragraph{Example of \emph{directed connection}}
+ex) src B doesn't know the mac address of A
+arp request is a request that carries inside of his pck some information of the mac address of the sender and the receiver.
+The ARP request the IP and the MAC address of the source
+
+the reply is not broadcasted because node A knows how to reach node B once the ARp request from B arrived to A
+
+\subsection{ARP packet format}
+The arp request and reply hve the same size, in the arp req the mac addr field is set zero because the sender doesn't know the mac addr of the receiver, but why they should be of the same size? Possibility
+
+Is to simplicity because to design a protocol is easier to manage things that are constant in time $\Rightarrow$ efficiency of the processing, processing is the main problem 
+
+ARP PDU:[SRC MA|SRC IP|DST MAC|DST IP] $\stackrel{\text{Embedding}}{\Rightarrow}$ Phy payload at which we add the PHY Header
+
+PHY Header: [SRC MAC|BROADCAST(111...11)]
+
+\subsection{Proxy ARP}
+proxy is a piece of software that pretends to be something it is not, interien in the flow pretending to be a souurce. 
+In the exmple he tries to replay to the added subnets 
+The router splits the broadcasting domain 
+
+If NO PROXY ARP, the host has to know that the adde subnet belongs to a different network 
+
+the use of the proxy let the host to send an arp request ad plays the role of an etire subnet. The higher interface pretends to be the subnet that contain the host and that is trying to send the arp request, the lower interfaace plays the role of the subnet destination of the request. 
+
+the proxy = I'M THE GUY YOU'RE LOOKING FOR
+
+\paragraph{Another se of the proxy arp}
+The trick is to put the ip address of all the nodes to zero pretending their to be part of the same local area network (LAN)
+
+\subsection{Reverse ARP}
+Is sent broadcasted but is repy by just one host
+
+\subsection{Fun Facts}
+\begin{itemize}
+\item In multi-hop connection IP addresses do not change in general, exception is made for we use other protocols, while MAC addresses change. THis is for the fact that IP address has local meaning.
+\item ARP/RARP requests are sent to the broadcast MAC Address (sent in a \textit{broadcast way}) and the ARP/RARP replies as \emph{unicast}
+\item ARP request do not cross routers, the router pretend to be the sender of the request or the destination of it. The request stops at its interface and he plays the role of collecting the dots
+\end{itemize}
+
+\chapter{Error Control}
+We say that the DLL can provides different services to different layers.
+At upper layer DLL offered services can be reliable (retransmit pck received with error until it is correctly received or until a certain number of attempts have been made) or reliable. 
+
+Unreliability stands for some clue concepts:
+\begin{equation}{\text{Unreliable service of DLL}\rightarrow}
+\begin{cases}
+\text{\textit{ Error transparent} service} \rightarrow \text{ very rare}\\
+\text{ \textit{Silent Packet Dropping} mode} 
+\end{cases}
+\end{equation}
+
+This means that at the upper layer we know either a pck is received or it is entirely not. 
+
+To provide \textit{error control} and \textit{reliability} at DLL we need: 
+\begin{enumerate}
+\item \textit{Error control} $\Rightarrow$ We need a field in the header of the PDU that makes it possible to check for bit errors, a way to recognize if the received pck contains error or not
+
+At DLL we do not correct errors whereas of the PHY layer we use a redundancy to correct the misleading information. This is due to the fact that, if we receive a un-correct pck to the DLL it means it contains several errors because the control errors code 
+\end{enumerate}
+
+\paragraph{Cycle Redundancy Check (CRC)}
+DLL: [SRC MAC|DST MAC|Type|...|Payload|Control Field = CRC]
+
+The CRC code is generated by the hardware while the pck are being transmitted
+
+
+\section{Review of Coding}
+
+Let we consider a domain set of Information words $\bar{a} = [a_0,a_1,...,a_{k-1}]$ with cardinality $2^k$. The codeword co-domain will be a $2^n$, with $n > k$, made by $\bar{c} = [c_0,c_1, ..., c_{n-1}]$.
+If we assume there are errors in the transmission if we received a codeword which has no information word corresponding to it.
+
+\begin{definition}{\textbf{Codebook}\\}
+The codebook is the collection of codewords of n bits associated to valid information words. WIth ths definition the cardinality/size of the codeboo is $2^k$
+\end{definition}
+\section{Yuri's notes of this lecture }
+
+\section{SLL}
+Overview of past concepts:
+\begin{itemize}
+\item Generator polynomial : $g(x) = g_0 + g_1 ì ... + g_{r-1}x^{r-1} + x^r$
+\item Code: $C = {g(x)a(x) : deg(a) \leq n - r - 1}$
+\item $x^n-1 = g_1(x)\cdot g_2(x)\cdot ... g_k(x)$ where $g_i(x)$ are monic and irreducible then any $g_{i_1}(x)\cdot g_{i_2}(x)\cdot ... g_{i_m}(x)$ with $i_1, i_2, ... i_m \in \{1.2.... k\} \Rightarrow$ $g(x)$ is a generator polynomial of a cyclic redundancy Code of length $n$ 
+\item $I \subseteq F[x]$ such that I is closed under moltiplication with polynomial $s \in F[x] \Rightarrow$ I is \emph{Ideal} such that, with $g \in F[x]$, $I = \{f(x)g(x) : f(x) \in F[x]\}$  
+\end{itemize}
+
+\subsection{Exercise}
+Hyp: n = 7
+\begin{equation}
+x^7 - 1 = x^7 + 1\\
+\end{equation}
+ We identify the first factor, we divide $x^7 - 1$ by this factor 
+\begin{equation}
+x^7 - 1 = (x - 1)(x^6 + x^5 + x^4 + x^3 + x^2 + x + 1)
+\end{equation}
+We try to find a divisor for the second term. We try $x^2$ and $x^2 + 1$ or also $x^2 + x + 1$. To find if it is a divisor we have to calculate if the rest of the division between the term and itself is zero  
+\begin{equation}
+x^6 + x^5 + x^4 + x^3 + x^2 + x + 1 = (x^2 + x + 1)(x^4 + x) + 1
+\end{equation}
+We see that this division gives a rest that is non-zero. 
+
+We now try with the divisors of degree 3 like $x^3$, $x^3 + 1$ or $x^3 + x + 1$. We find nether they are divisor for the last term so we try with $x^3 + x^2$ and $x^3 - x^2 - 1$ etc.
+
+The final solution is
+\begin{equation}
+x^7 - 1 = (x - 1)(x^3 - x^2 - 1)(x^3 + x - 1)\cdot 1
+\end{equation}
+
+\subsection{Parity Check Code}
+Given a $g_1(x) = x + 1$ \emph{Parity Check Code}.
+
+We know that \textbf{every cycle redundancy codeworks of....}
+
+A codewords generated by this polynomial can be $c_1 = \{a(x)g_1(x): a(x) = a_0 + a_1x + ... a_{n-2}x^{n-2}\}$. 
+If $a = [a_0 ... a_{n-2}] \rightarrow a(x) = a_0 + a_1x + a_{n-2}x^{n-2}$, that, combined with $g_1(x)$, result in $c(x) = a(x)g_1(x) = a(x) + xa(x) = [a_0, a_1+a_0, a_2+a_1, ... a_{n-2}]$. Overall we'll have $n$ bits but in this expression we'll not recognize a parity check code because this one shown is not systematic.
+
+\begin{definition}{\textbf{Systematic Code}}
+
+A cycle code is \emph{systematic} if 
+$\forall a \rightarrow \underline{c} = [\underline{s},\underline{a}]$
+
+Dimensionally $[a] = n - r$ bits, $c$ will have $n$ bits and $[s] = r$ bits
+\end{definition}
+ 
+ We can write 
+ \begin{equation}
+ x^n - 1 = g_0(x)g_1(x)1dots g_k(x)
+ \end{equation}
+ And we want to choose $g(x)$ such that $deg(g) = r$ with $r$ is the number of redundancy bits to append to the information words. Remembering that $g(x)$ generates the code $C$
+\begin{equation}
+\forall a \rightarrow \underline{c} = [\underline{s},\underline{a}]\\
+c(x) = s(x) + a(x)x^r \in C
+\end{equation}
+
+We wish to find $s(x)$, $deg(s) \leq r - 1$ such that $s(x) + a(x)x^r$ is a multiple of g(x).
+\begin{equation}
+\text{Find} s(x) \rightarrow \exists q(x) s.t s(x)+a(x)x^r = g(x)q(x)
+\end{equation}
+
+Let $r(x)$ be the residual of the division of $a(x)x^r$ by g(x) such that $a(x)x^r = g(x)\widetilde{q(x)} + r_o(x)$. 
+
+The important is that $deg(r_o(x)) < deg(g) = r$. SO we can write 
+\begin{equation}
+a(x)x^r + r_o(x) = g(x)\widetilde{q(x)}
+\end{equation}
+The solution is to take $s(x) = \text{residual of } \frac{a(x)x^r}{g(x)}$.
+
+So the process can be sum up as follows:
+\begin{enumerate}
+\item Given $\underline{a} = [a_0, ..., a_{n-r-1}]$
+\item Compute $b(x) = a(x)x^r \Rightarrow \underline{b} = [000...0,a_0,a_1,...a_{n-r-1}]$, which is a shifted vectors with part dimensions $[000...0] = r$ zeros and overall $n$ bits
+\item Compute the residual of the division of $b(x)$ by $g(x) \rightarrow s(x)$ with $\underline{s} = [s_0,...,s_{r-1}]$
+\item $c(x) = b(x) + s(x) \Rightarrow \underline{c} =  [s_0, s_1, ..., s_{r-1},a_0,...a_{n-r-1}]$
+\end{enumerate}
+
+\subsection{Reception}
+The sender sends the vector $a(x)$, which it coded like $c(x)$. The channel take the transmitted codeword and operates an operation adding $\underline{e} = [e_1,...,e_n]$ where $e_i = 1$ if the $i-$th received bit is $\neq i-$th transmitted bit and $e_i = 0$ otherwise.
+
+The receiver get $R(x) = c(x) + e(x)$, with $R_i = c_i \bigoplus e_i$. It checks whether $R(x) \in C$ and if is multiple of g(x). It compute $R(x)$ dividing it by $g(x)$ and getting $q(x)$ as result with residual $r_o(x)$. 
+
+If $r_o(x) = 0$ then the word $R(x) \in C$ and is accepted, otherwise it is rejected. 
+\begin{equation}
+If e(x) = 0 \rightarrow R(x) = c(x), \underline{R} = [R_0,R_1,...,R_{n-1} and \underline{c} = [s_0,s_1,...s_{r-1},a_0,a_1,...,a_{n-r-1}]
+\end{equation}
+In this case ($e(x) = 0$) the word is accepted $\underline{R} = \underline{c}$ and $\widetilde{a} = [R_r,R_{r+1},..R_{n-1}] = \underline{a} = [a_0,a_1,...,a_{n-r-1}]$
+
+If $e(x) \in C - {0}$ then R(x) is divisible by g(x) and gets accepted $\Rightarrow$ undetected error patterns
+
+\section{Single errors}
+In \emph{Single errors} $e(x) = x^h$ where h is the position of error bit and $\underline{e} = [00...01000]$ with the item $1$ in the $h$-th position. 
+
+So we have to find g(x) s.t $x^h$ is not divisible by g(x). 
+\begin{theorem}
+Any g(x) with more than 1 non-zero coefficient generates a code that can detect all single errors. 
+\end{theorem}
+
+\paragraph{\underline{\textbf{Proof}}}
+$g(x) = x^m + \widetilde{g(x)} + x^r$, with $m < r$. 
+
+$e(x) = x^h$ for any $h \leq n - 1, x^h$ canot be divided by g(x) with zero-residual
+
+If $h < r$ the solution is obvious.
+
+Else $h > r$ by contradiction $\exists q(x)$ s.t $x^h = q(x)g(x)$ and $q(x) = x^{h-r} + \widetilde{q}(x) + x^j$. 
+
+We now have $(x^{h-r} + \widetilde{q}(x) + x^j)(x^r + \widetilde{g}(x) + x^m) = x^h$ and we multiple the two term in the left as follows
+\begin{equation}
+x^r\cdot x^{h-r} + x^r(\widetilde{q}(x)+x^j) + \widetilde{x}(x^{h-r}+\widetilde{q}(x)+x^j) + x^{m+h-r} + x^m\widetilde{q}(x) + x^{m+j} - x^h = 0
+\end{equation}
+Where the last term $x^h$ can be deleted. 
+The statement we made is false and so $x^h$ can't be divided by $g(x)$
+
+We can see that $x^{m+j}$ is the term with the least degree above all and doesn't simplify. By construction $h - r > j$ and by definition $m$ is the degree of $g(x)$.
+
+In conclusion we can say that $g(x)$ built the way we had is not a possible divisor of $x^h$
+
+\textbf{FINE-METTI IL QUADRATINO}
+
+An error sequence $\underline{e}\neq 0$ is undetected when e(x) is multiple of g(x).
+All error patterne swith a single error ($e(x) = x^h$) are aòways detected by a CRC generated by polynomials with more than one term. 
+
+
+COnsidering g(x)= x + 1 code with n where, n - 1 is the size of information word and n the size of codeword. We also said that $x^n + 1 $ can be written as a linear combination between monic (monomi?) as $x^n + 1 = (x+1)...$.
+
+\paragraph{Systematic Codeword}
+To obtain 
+\begin{enumerate}
+\item $b(x) = a(x)\cdot x^r \stackrel{g(x) = x + 1 	AND r = 1}{\rightarrow} b(x) = a_{n-2}x^{n-2} + a_{n-3}x^{n-3}+...+a_0x$
+\item Divide b(x) with g(x) getting $b(x) = q(x)g(x) + s(x) \rightarrow a_{n-2}x^{n-2} + a_{n-3}x^{n-3}+...+a_0x = (x + 1)(a_{n-2}x^{x-2} + (a_{n-2} + a_{n-3})x^{n-3}) + (a_{n-2}+a_{n-3}+a_{n-4}+..a_0)$
+\end{enumerate}
+
+A parity check can detect single errors or odd error bits as we can find out with the following theorem
+\begin{theorem}
+All error patterns with odd number of errors are always detected by polunomial with even number of terms.
+\end{theorem}
+
+It's also true that every polynomial with even numbers of terms is a multiple of (x + 1). 
+In other words we can use an example to remark that every pattern with 2 errors can be detectd by a polynomial with 3 terms. 
+
+It's sufficient and necessary to have a polynomial with an even number of terms to detected a pattern with odd number of erros. The theorem says that every genertor polynomial is multiple of (x + 1) so every $g(x)$ with an even number of terms can be written as $g(x) = (x+1)+...$.
+
+Let the error be $e(x) = x^h$ and $\varepsilon$ the probability of having an error in the considered patter.
+The probability of having 3 errors will be ()
+\begin{itemize}
+\item $e(x) = x^h \rightarrow \sim \varepsilon\cdot(1-\varepsilon)^{n-1}$
+\item $e(x) = x^h(11 + x^j + x^e) \rightarrow \sim \varepsilon^3\cdot(1-\varepsilon)^{n-3}$ (binomiale n su 3)
+\item $e(x) = x^h(1  x?j + x^e + x^m + x^v)  \rightarrow \sim \varepsilon^5\cdot(1-\varepsilon)^{n-5}$ (binomiale n su 5)
+\end{itemize}  
+
+We want to find all error patterns with only 2 erros. 
+$e(x) = x^h + x^{h+m} = x^h(1+x^m) \Rightarrow$
+Any g(x) with more than one non-zero coefficiet can recognize all single errors so that $x^h$ is not a multiple of g(x).
+
+The condition we need to respect to detect all errors patterns with 2 errors in  codeword of $n$ bits is that g(x) must \textbf{not} be a factor of (1 + x^{m}), with $m \leq n - 1$.
+
+If we consider the generator polynomial $g_2(x) = (1 + x)$ it can detect all \emph{odd} errors but not the \emph{even} ones. Also we can say that $g(x) = x^15 + x^14 + 1$ can detect all \emph{2} errors in codewords of size up to $n = 32767$ and also all single errors (because $g(x)$ has more than one term) and all pairs of errors. 
+
+\subsection{Error Burst}
+An \emph{error burst} of size $m$ is a sequence of $m$ bits detected randomyl, some of them could be wrong and some not. 
+In this case we have $e(x) = x^h(1 + e_{h+1}x + e_{h+2}x^2 + ... + e_{h+m}x^{m-3} + x^{m-1})$ and say that h is the position of the first error, the last bit is also wrong and the other are unknown.
+
+We can say so that $e(x)$ can be recognized by a $g(x)$ such that $g(x) = 1 + g_1x + ... + g_{r-1}x^{r-1} x^r$ with $r > m-1$.
+
+In general a generator polynomial of degree $r$ and with form $g(x) = 1 + ... + x^r$ can detect all error bursts of length $m \doteq r$.
+
+\section{Review of ARQ}
+ARQ can be
+\begin{itemize}
+\item S&W $\Rightarrow$ Tx WIndow = 1 pck, Rx WIndow = 1 pck
+\item Go-Back-N $\Rightarrow$ Tx windows = N pcks, Rx windows = N pcks
+\item Selective Repeat $\Rightarrow$ Tx windows = N pcks, Rx windows = M pcks
+\subsection{Stop & Wait}
+\subsection{Go-Back-N}
+\subsection{Selective Repeat}
+\textbf{INSERIRE DISEGNO}
+Assume packet 5 is lost. There'll be a gap in the receiver input so that the pck after the one has been lsot will be stored at the MAC layer of the receiver.
+
+The receiver will send multiple ack(5). During \emph{Retransmission Time}the ack of the pck lost will be continuously sent, after the \emph{Retransmission Timeout}(RTO) the pck has been lsot has to be retransmitted (pck 5 in i.e).
+
+Every single pck can have its own timer that runs in parallel with the others. 
+
+Options of implementation:
+\begin{enumerate}
+\item Keep one RTO per Tx window $\Rightarrow$ It refers the timeout at which the first pck has to be retransmitted. 
+Every time we have the ack of a new pck, the RTO starts again. 
+If you have ack of a pck that has already been sent, the RTO keeps running.
+\item Keep one RTO per pkc AND the receivers sends acks that will be \emph{selective} $\Rightarrow$ the ack will says: "I received everythin up to 6 but I have a gap between 4 to 6". In this case the implementations is more efficient in some situations but surely is more informative.   
+\end{enumerate}
+
+\paragraph{Example}
+Hyp:
+\begin{itemize}
+\item Tx windows = 4 pcks
+\item Pipe capacity = 4 pcks
+\end{itemize}
+
+Suppose to have 4 pcks to be sent and we have Tx window = Pipe capacity. If everything goes right we have a continous flow of received pcks and after the deliver of pck 4 we'll have the ack of receveide pck 1(ack(2)). If I now have pck 5 to be sent,the winodw will be full and i will get back the ack(3) (received pck 2). 
+
+So if I correctly received pck 1 I will received ack(2). Suppose now that pck 2 contains errors and it is not correctly received and the ack pck is not sent back. Pck 3 is correctly received but out of order as for pck 4 and 5 (the're sotred at mac layer and not put at the upper level). 
+
+Duting the RTO the tx window is full so we have to wait for retransmitting pck 2. 
+$\spadesuit$
+
+Let us consider an example where the tx windws $\gg$ pipe capacity. This let \emph{idle times} that are due to suboptimal setting of: 
+\begin{itemize}
+\item RTO is longer than RTT $\Rightarrow$ some performance might be lost because of delayed reaction
+\item Tx window size is too small $\Rightarrow$ if we increase it we can transmitt during the phase we're getting back multiple ack of one pck lost. 
+\item queuing delay
+\item Memory occupied by the pcks in the receiver and the transmitter
+\end{itemize}
+Remember that the Pipe capacity is somthing that you can not change and depends to the technology you're using.
+
+\section{Performance Analysis of ARQ}
+Assumptions we have to consider are:
+\begin{enumerate}
+\item Long-term average throughput: S
+\item Packet delivery delay: D
+\item RTO = RTT
+\item Bit rate of bottleneck is constant = R
+\item Pcks have fixed size: L
+\item Acks have fixed size: H 
+\item Pcks loss occurs with equal probability: $P_L$
+\item Pck is correctly received with probability $P_C = 1 - P_L$
+\item Pck errors are iid
+\item Connections are not shared between flows
+\item Acks are \emph{always successfull} so they're always correctly received  
+\end{enumerate} 
+Acks are sent at lower level with high probability to achieve robustness. 
+In classica communication data pcks are huge (1000 bytes) and the acks are few bytes. If the acks is not correctly recevide the receiveer has to resent thousands of bytes and this is a waste of time and performance. So the last one assumption is crucial.   
+ 
+\subsection{ARQ S&W}
+A \emph{renewal reward processes} is characterized by a sequence of \emph{interarrival times}$\{A_i\}$ that are iid. 
+
+Every statistical dependencce of the past is deleted after an interval $A_i$ has occured.
+
+Let us define \emph{rewars}$\rho_i$ assigned to interval $A_i$.
+
+The long-term average reward rate tends to $\frac{E[rho_i]}{E[A_i]}$. 
+
+In our protocols the rewards are the numbers of pck deliver to the destination and the $A_i$ is the time that occured to do so. 
+
+
+\textbf{INSERISCI DISEGNO}
+We said that RTO = RTT so every intervals are the same and between the 2 pcks does not happen anything so RTT ar renewal time. 
+So we can say that
+\begin{equation}
+\begin{cases}
+RTO = RTT\\
+A_i = RTT \forall i\\
+rho_i = \text{ number of bits correctly received in }A_i
+\end{cases}
+\end{equation}
+
+$rho_i$ is a r.v and can assume 2 values:
+\begin{equation}
+\begin{cases}{rho_i}
+L \text{ If pck is correcly received}\\
+0 \text{ if pck is lost}
+\end{cases}
+\end{equation}
+
+
+\begin{equation}
+\begin{cases}
+S_{SW} = \frac{E[rho_i]}{E[A_i]} = \frac{L\cdotP_c + 0\cdotP_L}{RTT} = \frac{L\cdot P_C}{RTT}\\
+C_{SW} = R\cdot RTT\, [bits] = \frac{R\cdotRTT}{L}\, [pcks]\\
+\frac{L}{RTT} = \frac{R}{C} 
+\end{cases}
+\end{equation}
+$\Rightarrow$ The throughput will be
+\begin{equation}
+S_{SW} = \frac{R\cdot P_C}{C}
+\end{equation}
+If C is small (close to 1) the S&W paradigm is fine. 
+For the end to end delay D the computation is again simple and wwe look at what happens between the source and the destination. In order to deliver pcks successfully the times we need is $\tau_p ì \frac{L}{R}$. Suppose a pck is lost and the delay $d_{SW}$, which is a r.v, is equal to
+\begin{equation}
+d_{SW}= r \cdot RTO + \frac{L}{R}\cdot \tau_p = \text{ time of retransmission + time of the successful transmissions}
+\end{equation}  
+With $r$ the number of retransmissions and $d_{SW}$ is a geometric random variable.
+
+In this case we have:
+\begin{equation}
+D_{SW} = E[d_{SW}] = \frac{L}{R} + tau_p + RTO\cdot\frac{1-P_C}{P_c} \stackrel{RTO = RTT}{\rightarrow} D_{SW} = \frac{L}{R} + \tau_p + RTT\cdot \frac{1-P_C}{P_C}
+\end{equation}
+
+RTO = RTT is no longer true in a end to end communications becuase in this case the RTT will be a random variable. 
+\subsection{ARQ GBN}
+GBN protocol with the tx windows = N pcks. 
+If pck are correctly received every $T = L\R$ we received nother one. assume now that some pcks are lost. I this case the following correctly received pcks will be stored at the MAC layerof the receiver. 
+If you have a pck lost the renewal process time will not start just after and so \emph{if TX windoes(n) = pipe capacity and RTO = RTT} 
+\begin{equation}
+\begin{cases}{A_i = }
+\frac{L}{R},\,  \text{if the pck is successfull}\\
+N\frac{L}{R} = RTO = RTT \, \text{if pck is lsot} 
+\end{equation}
+\begin{equation}
+\begin{cases}{rho_i = }
+L,\, \text{if the pck is successfull}\\
+0, \, \text{if pck is lsot} 
+\end{equation}
+The throughput will be:
+\begin{equation}
+S_{GBN} = \frac{E[rho_i]}{A_i} = \frac{L\cdot P_C}{L\R\cdot P_c + NL\R(1-P_C)} = \frac{L\cdot P_C}{L\R\cdotP_C + RTT(1-P_C)} = \frac{R\cdot P_C}{P_C + R\L\cdot RTT(1-P_C)} \stackrel{R\L\cdot RTT(1-P_C) = C}{\rightarrow} S_{GBN} = \frac{R\cdot P_C}{P_C + C(1-P_C)} 
+\end{equation}
+The GBN is good when the $P_C$ is good 
+
+\subsection{SR}
+In this case the TX window will be large, the process reniew itself at every step so $A_i = \frac{L}{R}$ and \begin{equation}
+\begin{cases}{rho_i = }
+L, \, \text{if the pck is correct}
+0, \, \text{otherwise}
+\end{equation}
+
+The throughput will be
+\begin{equation}
+S_{SR} = \frac{E[rho_i]}{E[A_i]} = \frac{L\cdot P_C}{L\R} = R\cdot P_C
+\end{equation}

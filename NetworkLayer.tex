@@ -1,0 +1,55 @@
+\chapter{Network Layer}
+Key: Internet protocols that define the addressing plan. 
+
+\section{IP}
+ICMP is a different protocol and it uses for the basic debugging
+
+Ip addresses are 32 bits long, grouped in octets, represented as decimal number from 0 to 255.
+It is logicallly divided in 2 parts: the most significant bits identifies the IP Network and the other identify the host ID. Number of digits used to identify the network is variable (8-41)
+
+One public IP address should be own by just one interface but we can find a device with multiple IP addresses, one for each itnerface. 
+
+In order to identify a network you set to 0 the host address.
+
+In order to connect 2 host we need 2 bits  
+ 
+3 type sof addresses:
+\begin{enumerate}
+\item unicast: always start with a 0. Assigned to huge networks and we have few bits to identify the network. Class A 
+\item broadcast: Class B start with 10 and assign the first 2 bytes for the networks 
+\item Class C start with 110 and uses the first 3 bytes for the networks and the last one for the host so that this kind of network can host just few host 
+\item multicast: CLass which starts with 111
+\end{enumerate}
+
+HostID all zeros identifu the network paradigm: "This Host in This Network"
+HostID  e.g 0.0.0.128 means "That Host in This Network"
+Loopback: 127.x.x.x  (IP destination): this means that a pck with the header set to 127 that pck will be retransmitted to the device that had transmitted it previously. The pck will go down and then up again upon layers without touching the MAC one.
+
+\paragraph{Example}
+IP address: 131.175.21.1 in binary is 10000011.10.x.x
+
+\paragraph{Example}
+Which of the followings are valid netmasks?
+\begin{itemize}
+\item 255.255.255.255 is ok and identify a single host network
+\item 255.255.0.0 OK
+\item 255.128.0.0 OK
+\item 128.255.0.0 NO because 255 is binary 1 and so we have a number lower than 1 befor the 1
+\item 255.192.0.1 NO for the last 1
+\item 0.0.0.0 OK because the entire IP address a single host in the world
+\end{itemize} 
+
+\paragraph{Example}
+132.178.1.0/23
+
+\textbf{While the gateway MUST be in your network, the DNS can be in another network}
+
+\textbf{The Bridge is transparent from the IP layer}
+
+The port number identify an application in a host, combined with the IP it identify a socket that identify an application in the world.
+
+
+If we find in the options the 4 bytes belonging to the magic cookie sequences the recevier know that this is a DHCP pack
+
+
+

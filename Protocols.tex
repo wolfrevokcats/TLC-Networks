@@ -1,0 +1,118 @@
+\chapter{Protocol IEE 802.x Standards Family}
+
+\paragraph{802.3 vs Ethernet} 
+802.3 has been a standard \emph{de facto} because everybody starting using uit and became much more popular than the used one. 
+
+The difference between the 2 is on the header of the PDU that for the 802.3 is for the info of the length of th PDU and for the Ehternet protocols carries information of the protocol. 
+
+Why the destination address appears befor the source address?
+
+Is it possibie for a device C toreceive a pack from device B in a fully switched network? Yes only if the switcher does not knwo the destination of the pack it has to store because in this case the switch send the pck to all the devices 
+
+If you have one device per port you do not have collision 
+
+\chapter{Wireless LAN: IEEE 802.11}
+\section{MAC}
+Duty cycle (fraction of time in which the device is active on overall time) type of access of ar listen before talk. 
+Wifi does not have to transmit huge amount of data.
+
+It can not provide collision detection: either transmit or receive.
+
+In a wifi network the communication goes from the terminal devices to the access point, which resends the pcks to the destination (devices can't communicate between themselves). 
+
+In order to limit the risk of collison i the first version of wifi is called Collision Avoidance:
+\begin{itemize}
+\item channel idle: transmission
+\item channel busy: wait for the channel to become idle again then enter backoff. FOr every idle slot the bakcoff decreases and it freezes until the channel is idle. The backoff time is statistycal larger and larger 
+\item Hidden node problem 
+\end{itemize}
+
+\subsection{Collision Avoidance: RTS/CTS}
+
+When you send a RTS to a receiver you have to specify the time you need to perform your transmission. 
+
+If 2 tx send a RTS in the same time? 
+
+This mechanism is not used because the receiver could not tell the diffrence between the sensing and the 
+
+When the receiver(node C) receive a transmission at 54 Mbit/s(basic rate) C can not decode the message but feels something is going on. 
+
+As the bit rate increases the effectives of the mecahnism RTS/CTS of Collision Avoidance becomes lower
+
+\subsection{InterFrame Spacing (IFS)}
+Sinche error in the wireless transmission is quite common you have to perform a mandatory ack mechanism. 
+
+Any time the channel becomes idle  node has to wait at least a DIFS until to start the counter. The destination waits only  SIFS to transmit the ACK.
+
+You can give priority to certain transmission than others. 
+
+\subsection{PHY: multirate}
+The header is always send at the basic rate (the lower possible) and it is not modulated as the payload.
+Why this? How do you increase the bit rate? you change the modulation and the receiver has to know which modulation has been used y the tx. So in the header you putthe information about the used modulation so that the receiver, after having decode the header, know what is the modulation it has to perform to decode the real message(payload) and change it to accord it. 
+
+You pay a fixed cost for the DIFS and the header whereas for the payload the cost changes. 
+
+When the bit rate increases the efficiency drops at 68percent so that the decoding time is due to the decoding of the header and the waiting time. 
+
+The only way to avoid the problem to decode which modulation has been used by the tx is to perform a mechanism in the receiver for which it can decode any modulation as you have multiple receivers, each of which can decode a specific modulation.
+It cost econmically to much 
+
+\subsection{Anomaly behaviour of WiFi}
+CSMA/CA provides fairness i terms of channel access probability so that each node has the same probability to access the channel. 
+
+When all node suses the same bit rate so every node occupeid the sam eamoutn of time using the channe. 
+
+However the thorughput of all active stations tends to that of the slowest station.
+
+\chapter{Bluetooth}
+Star topology where the master (centre of the star) can be any nodes in the topology. There's a mechanism which choose the master node of the network. 
+Before starting the transmission all nodes agree to the frequency they'll use in the transmission 
+
+Provides 2 services to the upper layer: SCO and ACL.
+SCO is intended to carry voice samples and does not perform acks. 
+
+
+
+
+ 
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

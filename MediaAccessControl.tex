@@ -1,0 +1,262 @@
+\chapter{MAC}
+\begin{itemize}
+\item Deterministic protocols: All the mac protocols where the access to the medium is predetermined. 
+\item Random MAC protocols: In order to transmitt you have to conquer the medium (random strategy). One node does not know how many nodes exist that thave to transmit so they try to transmit 
+\item Demand based protocols: something in between. We can't predict which unit will uses the medium, but this strategy allow sthe unit to ask for the medium. SLightly more complex because they requeired combination among all
+\end{itemize}
+
+The mac layer is in charge to the delivery of the PDU provided by the upper layer and needs to manage the access to the medium. 
+
+Improtant to notice that DLL is divided in LLL(Logical Link Control) and MAC 
+
+\paragraph{Static Allocation}
+Has been skipped
+\section{Deterministic protocols}
+\subsection{FDMA}
+The channel provides a bandwidth and a maximum capacity such tat: $R \backsim B\log_2 (1+\Gamma)$
+
+Split the bandwidth of the channel in subband = subchannel that are fiven to one specific user.  In this case the bit rate is divided among all bt the users can transmitt during all the time, just through some fraction of the bandwidth
+
+To avoid collision you let some space between the subband in which the system will be idle (gap bands). So that each subchannel will have a band < B/3. 
+
+\begin{equation}
+\begin{cases}
+B_i < \frac{B}{N}\\
+R_i \approx \frac{R}{N}
+\end{cases}
+\end{equation}
+
+\subsection{TDMA}
+All the bandwidth to one user but just for a fraction of time. 
+SO every user can transmitt with the full bit rate but can do that only for a specific amount of time (slot). 
+ 
+ 
+\emph{Frame} is a set of N slot after which every user is scheduled again
+
+In case of averagebit rate, which solution is the best one? 
+Let's consider the ideal case where you can split the time (TDMA) and the frequency (FDMA) perfectly. 
+In terms of longterm the bit rate the throughput is the same $R/N$. 
+
+With FDMA we have the advantage that we don have to wait to transmitt. To do so you have to modulate the signal with different carrier. 
+
+In terms of average system time the time taken from the first pack to start being transmitted to the nd of transmission is slower for TDMA. When you access the channel your pck is transmitt with a higher speed (R) than in FDMA (R/N).
+
+If my pck is L bits long, for TDMA $T_{slot} = \frac{L}{R}$, $delay = \frac{N}{2} T_{slot} + T_{slot} = (N/2 + 1)T_{slot}$
+
+In FDMA the delay will be $= L/R_i = L/R\times N$
+
+\subsection{CDMA}
+The suer will share both time and frequency dimension but will use signature for their signals. Every user will uses a different pattern of \emph{chips}(sequences made of on/off phases) to modulate their signal. 
+
+Considering our signal, if it is 1, the trasmitted signal will be the opposite of the chip pattern. WHen our signal becoms 0, the transmitted one will have during that time the same form of the corresponding chip. 
+
+WHen you integral the energy of the signal for a bit period where the original signal values 0 the transmitteed signal matches perfectly with the pattern and the integral will get a postiive peak. In positive bit period for the original signal the energy integrated will get a negative peak. 
+
+\paragraph{Esempio}
+
+2 users. User one assigned to the chip pattern : +1 +1 +1 +1 while user2 is assigned to a different chip pattern: +1 -1 +1 -1.
+
+SUppose that user1 want to transmitt the data seq: $1\, 1 = b_0 b_1$.
+
+After CDMA modulation the first signal corresponding to usr1 will be: $1\,1\,1\,1\,1\,1\,1\,=\,b_0\,b_1$
+
+USer1 want to transmit the data seq: 0 1 --> $-1\,+1\,-1\,+1\,+1\,-1\,+1\,-1\,=\,b_0\,b_1$
+
+SO these 2 signals will be modualtedand sent over the channel that will introduces some attenuation $(\alpha, \beta)$ and assuming any error. Te 2 signals in one channel overlap and the receiver will receive:
+
+$\alpha - \beta \alpha + \beta \alpha - \beta \alpha + \beta \alpha + \beta \alpha - \beta \alpha + \beta \alpha - \beta = r0\, r1\, r2\, r3\, r4\, r5\, r6\, r7$
+
+We act a convesion S/P that produce a pattern of 4 chips = r0 r1 r2 r3 and another conversion tht get r4 r5 r6 r7. 
+
+This paradigm can be seen as communication among people that speak diffrent language. Those who know one language can talk and understand but the listen the speaking of a language they dont know and received that as a "rumore di sottofondo" (noise). 
+
+The spreading sequences should bemade in order to have a poor correation with a cyclic shift of themselves. 
+
+
+
+Multipath self-interference = This is a phenomenon called "fading".
+
+
+
+CDMA can be implemented in 2 ways: 
+\begin{itemize}
+\item Direct Sequence Spread Spectrum (DSSS): the price tha tyou pay in order totransmitt 1 single bit of information you actually need to send over the cahnne la sequence of chips (let's say k chips). Since this transmission has to take the same time of the bit and this measn that Tchips = Tbit/k and the signla bandwidth is k time larger than hat required by the original message (information signal) --> it's require a larger bandwisth and it's called spread spectrum because it spreads the bandwidth.    
+
+If the received energy per chip is $\varepsilon$, so thtat the SINR before despreading is $\varepsilon/N_0$, after despreading the enery will be $k\varepsilon/N_0$. In this mode can transmitt using very low power. 
+
+Frequency Hopping Spread Spectrum (FHSS): if the bandwidth of my original signal is B $\backsim 1/Tbit$, you split the KB bandwidth    
+\end{itemize}
+
+\section{Random access protocols}
+
+ALOHA has the problem of stability
+
+\subsection{Batch resolution problem}
+Pcks arrive in batch (groups) so that the packet arrival process will be a sequence of burst of pcks and then nothing, groups of packs then nothing.
+
+\subsubsection{Splitting-tree BRAs}
+The time is slotted with fixed or not sixed.
+
+Some nodes are activated  so they can transmitt, the thers are kept silence
+
+3 situations:
+\begin{itemize}
+\item no node transmitt : idle slot
+\item copia slide
+\item copia slide
+\end{itemize}
+
+\subsubsection{Recursive resolution procedure}
+\paragraph{Diving a batch in subgroups}
+This protocol has some drawbacks. 
+
+Avoid the activation of a slot if his neighbor is idle and his parent has collided.
+
+\subsubsection{Splitting Tree Performance Analysis}
+batch size: numerb of ndeos in the batch
+
+Average resolution time for a batch size n: T(n) = mean numebr of slot that we need to ersolve the n-problem batch
+
+Throughput: S = n/T(n)
+
+Given n, what we need t determine is the expression of T(n).
+Let p be the probability of choosing the left subset (L) after a collision, so 1-p is the probability to chose the right one (R).
+
+A simpel way to find the expression of T(n) is to exploit the recursion:
+T(0) = 1; 
+T(1) = 1;
+Recursion: suppose that you know the expression of T(k) or all k < n and you want to find T(n). 
+
+For n > =2 T(n) = 1 (collided) + E[T(l)] (= n nodes choose L) + E[T(n-l)] ( = n-l nodes choose R)  with l is a random variable (l $\backsim B(n,p)$)
+so $T(n) = 1 + \sum\limits_{h = 0}^{n} Pr[l=h](T(h)+T(n-h)) = 1 + \sum\limits_{h=0}^{n} \binom{n}{h} p^h(1-p)^{n-h} (T(h)+T(n-h)) = 1 + \sum\limits_{h=1}^{n-1} \binom{n}{h}p^h(1-p)^{n-h}(T(h)+T(n-h)) + (T(0)+ T(n))(p^n - (1-p)^n) $
+
+So $T(n) = \frac{1 + \sum\limits_{h=o}^{n} \binom{n}{h} p^h(1-p)^{n-h}(T(h)+T(n-h)) + T(0)(p^n+(1-p)^n)}{1-p^n-(1-p)^n}$ 
+
+This is the recursive expression of T(n).
+
+
+
+\subsection{CSMA}
+
+the signal takes some time to propagate, the vulnerability interval is tiny.
+
+If the channel is busy:
+\begin{itemize}
+\item keep in line (wait for the channel): if 2 nodes activate during the channel is busy, the wait but start to transmitt at the end of the previous transmission --> high traffic
+\item At the end of the transmission that makes the channel busy the nodes can generate a random backoff. After this backoff the node check the channel, if it's busy the nodes waits for the double time of the random backoff
+\end{itemize}
+
+If the node wait time tau and after tau the channel is idle, the node flip a coin and with probability p it transmitt and with probability 1-p it waits a random backoff time
+\paragraph{CSMA/CD}
+Collision Detection is only in technologies that perform transmission and reception simultaneously (not wireless communication).  
+
+
+\subsection{CSMA: throughput analysis non-persistent}
+All packs have size L and Tx has bit rate R.
+
+Packet arrivals can be modelled as a Poisson Process of rate $\mu [pack/s].$
+
+Goal: We want to find the long term throughput as a function of $\mu$.
+
+$(bit per seconds) S*$
+
+(normalized version) $S = S*\times T \rightarrow$ number always <1 (we can't do bettter than transmitting 1 packet per period). It reaches the vlaue 1 if we perform the perfect MAC
+
+How do we compute the long term throughput? We observe what happens on the channel over time you'll see we have some arrivals according to a Poisson process; if the transmission find the channel idle the transmission will go from t0 to to+T and the signal will occupy the channel for an extra time called $\tau$ = propagation time. So the channel will be busy for an overall time = T + $\tau$. 
+
+The second arrival can be far away from the first one and it can find the channel idle and stars the transmission. It will starts to transmitt with a delay y so that the next process could colldes with it. In this case the busy period will be equal to T + $\tau$ + y.
+
+If we have other arrivals during this last busy period, they'll be stored and they'll start after the previous transmission is over. The sttatistica distribution of the period (busy,idle) is:
+
+Our renewal period: Bi + Ii (Busy period + Idle period)
+
+Reward: 
+\begin{equation}{w_i}
+\begin{cases}
+L \, \text{if tx is successful}\\
+0 \, \text{in case of collision}
+\end{cases}
+\end{equation}
+
+Applying the renewal reward theorem we can say that:
+\begin{equation}
+S* = \frac{E[w_i]}{E[B_i+I_i]} =\frac{LP_{nc}}{\hat{B}+\hat{I}} 
+\end{equation}
+WIth $P_{nc}$ the non collision probability
+
+The arrivals follow Poission process so that the interarrival time are exponential random variable therefore
+\begin{equation}
+\hat{I} = \frac{1}{\mu}
+\end{equation}
+
+We now want to calculate $\hat{B} = E[B_i]$. We know that
+\begin{equation}
+\begin{cases}
+T+\tau \, \text{if no collision}\\
+T+\tau + y \, \text{if collision with packet arriving y seconds later}
+\end{cases}
+\end{equation}
+
+If we consider a collison event we have a node that generate the busy period and a propagation time of $\tau$ in which signals could collide (so we cna assume it as the vulnerability time). After $\tau$ the arrivals are possible. y s the delay of the last colldiing pcks 
+
+\begin{esp}
+\hat{B} &= (T+\tau)P_{nc} + (T+\tau + E[y])(1-P_{nc}) \\&= T + \tau + E[y|collision](1-P_{nc}) \\&= t + \tau + \frac{E[y]}{(1-P_{nc})}\times (1-P_{nc}) \\&= T+\tau+E[y] \\&= E[B_i]
+\end{esp}
+
+\begin{equation}{Pr[y \geq 0]}
+\begin{cases}
+0\, \text{if u}\geq \tau\\
+1 - P[\N(u,\tau) = 0] \, 0\leq u < \tau
+\end{cases}
+\end{equation}
+
+COnsidering $\tau$ we can set an intermediate value u. Between u and $\tau$ we have a certain probability to have an arrival equal to $1 - P[\N(u,\tau) = 0]$
+
+COnsidering $\N(u,\tau) \backsim \P(\mu(\tau-u))$ so that $P[\N(u,\tau)=0] = e^{-\mu(\tau-u)}$
+
+SO that 
+\begin{equation}{Pr[y \geq u]}
+\begin{cases}
+0 \, u \geq \tau\\
+1-e^{-\mu(\tau-u)}\, 0\leq u < \tau
+\end{cases}
+\end{equation}
+
+For non negative rvs it holds 
+\begin{esp}
+E[y] &= \int_{0}^{\infty} Pr[y \geq x] dx = \int_{0}^{\tau} 1 - Pr[y \leq x] dx = \int_{0}^{\tau} 1 - e^{-\mu(\tau-x)} dx \\&= \tau - \frac{1-e^{\mu(\tau-u)}}{\mu} 
+\end{esp}
+
+So that
+\begin{equation}
+\hat{B} = T + \tau + \tau - \frac{1-e^{-\mu(\tau-u)}}{\mu}
+\end{equation}
+
+We now have to compute the probability that in the interval from t0 to to+T (consdieered the first busy period) we do not have other arrivals, knowing that $\N(t0,t0+\tau) \backsim P(\mu\tau)$
+\begin{equation}
+P_{nc} = Pr[\N(t0,t0+\tau) = 0] = e^{-\mu\tau}
+\end{equation}
+
+It's improtant to remember that the pairs $(B_i+I_i,W_i)$ are independets from each other. 
+
+So the throughtput of bits per seconds, considering $a = \frac{\tau}{T}$ and $G = \mu T$
+\begin{esp}
+S* &= \frac{Le^{-\mu\tau}}{T+\tau+\tau-\frac{1-e^{-\mu\tau}}{\mu}+\frac{1}{\mu}} \\&= \frac{Le^{-\mu T\frac{\tau}{T}}}{T(1 + 2\frac{\tau}{T} - \frac{1-e^{-\mu T\frac{\tau}{T}}}{\mu T} + \frac{1}{\mu T})} \\&= \frac{L}{T}\frac{e^{-Ga}}{1-\tau a - \frac{1 - e^{-Ga}}{G} - \frac{1}{G}} \\&= \frac{L}{T}\frac{e^{-Ga}}{1+\tau a +\frac{e^{-Ga}}{G}} \\&= \frac{L}{T}\frac{Ge^{-Ga}}{G(1+\tau a) + e^{-Ga}}
+\end{esp}
+
+And the normalized one is
+\begin{equation}
+S = \frac{S*T}{L} = \frac{Ge^{-Ga}}{G(1+\tau a)+e^{-Ga}}
+\end{equation}
+
+and cna be compared to the ALoha an dprue aloha 's one: $S_{aloha} = Ge^{-2G}$ and $S_{SALOHA} = Ge^{-G}$ , if $\tau \ll T$ then $a \ll 1$. If a grows close to 1 the performance of the 2 protocols are more orless the same (if the propagation time is comparable to the time it takes you to realize if the transmission is possible). 
+
+To do better you should have the access mechanism updated. 
+\paragraph{Questions}
+
+1) If I have a network with small number of nodes that can perform carrier sense end low traffic which protocols will you prefer? ALOHA because Pe will be low so it's ok but CSMA will be better 
+
+2) If I have low traffic and no carrier sense capability ALOHA will win
+
+3) If I have high traffic and carrier sense capacbility CSMA non-persistent will be the best choice. 
+

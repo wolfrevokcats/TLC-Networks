@@ -1,0 +1,171 @@
+\chapter{Addressing Fundamentals}
+An address uniquely identify the source and final destination and specify the route through the networks.
+\section{Internet naming and addressing}
+\subsection{Requirements}
+\begin{itemize}
+\item Uniqueness/unambiguity
+\begin{equation}
+\begin{cases}
+\text{1. Every address} \stackrel{shall\, be}{\Rightarrow} \text{ associated to a } \textbf{single} \text{ entity in the network}\\
+\text{2. The \textbf{same} entity} \stackrel{may\, be}{\Rightarrow} \text{ multiple addresses}
+\end{cases}
+\end{equation}
+\item Multilevel structure
+\begin{equation}
+\begin{cases}
+\text{1. Allow for hierarchical routing}\\
+\text{2. Address shall be \textbf{unique within it scope}}
+\end{cases}
+\end{equation}
+\item Internet $\Rightarrow$ Each address must be unique \textbf{within the scope of the layer}
+\end{itemize}
+
+\subsection{Address Level}
+\begin{itemize}
+\item PHY/MAC address
+	\begin{enumerate}
+	\item They \textbf{uniquely identify} the 				\textit{Network Interface Card (NIC)} in a local 		network.\\
+	\item The strict condition is that \textbf{it must be 		unique at local level}, but in practice we can find 		it is also at global level.
+    \item MAC address is \emph{Hardware} written to have a faster process
+	\item \emph{Example: } Bluetooth [20-c9-d0-d5-aa-be], 		WiFi [20:c9:d0:d5:aa:bd], Ethernet [a0:4f:d4:4:91:cf]
+\end{enumerate}
+\item Data Link Layer address (DLL) $\Rightarrow$ Logical Link Control (LLC) address
+	\begin{enumerate}
+	\item They uniquely identify a logical \textit{point-to-point} connection between two directly connected hosts.
+    \item \textbf{Must be unique for reach point-to-point connection}
+    \item Can be repeated in different connections
+    \item Usually quite short $\rightarrow$ one/two bytes
+	\end{enumerate}
+\item Network Layer address $\Rightarrow$IP address
+	\begin{enumerate}
+	\item Uniquely identify a host in the entire Internet
+    \item \textbf{Must be unique at global level}
+    \item \emph{Example: } only valid network address today $\rightarrow$ IP address: 192.168.13
+	\end{enumerate}
+\item Transport Layer Address $\Rightarrow$ Port Numbers
+	\begin{enumerate}
+	\item \textbf{Unique within a host for a given transport protocol}
+    \item Ca be re-used in different hosts or in the sam host for different transport protocols $\Rightarrow$ TCP and UDP can re-use the same port numbers
+    \item Usually \textit{Transport Layer Address = 2 bytes}
+    \item \emph{Examples: } Port Number 21, 22, 23, 25, 53, 80 corresponding to \textit{File Transfer Protocol (FTP), Secure Shell (SSH), Telnet remote login service, Simple Mail Transfer Protocol (SMTP), Domain Name System (DNS) Service, Hypertext Transfer Protocol}
+	\end{enumerate}
+\item Application Address
+	\begin{enumerate}
+	\item Human readable mnemonic addresses
+    \item \textbf{Unique at global level}
+    \item \emph{Examples: } URL or email like www.unipd.it and zanella@dei.unipd.it
+	\end{enumerate}
+\end{itemize}
+
+\subsection{Address Translation Mechanisms}
+One host interface has 3 different addresses: a \emph{Host Name}, readable like "zanella.dei.unipd.it", converted to the \emph{Internet address (IP)} by the \emph{Domain Name System (DNS)} and the conversion of the \textit{IP address} into the \textit{MAC address} due to the \textit{Address Resolution Protocol} (ARP).
+
+\subsection{Addressing in Internet}
+\begin{itemize}
+\item \begin{equation}{\text{ IP Address = }}
+\begin{cases}
+\text{ 32 bits}\Rightarrow\text{ Grouped in octects}\\
+\text{ Every octects}\Rightarrow\text{ Decimal number} \in \{0,255\}\\
+\text{ Every decimal number is separated by dots}
+\end{cases}
+\end{equation} 
+\item IP address = [ IP Network Address $\mid$ IP Host Address ]
+
+$\curarr$ \textbf{IP Network Address} \textbf{$\Rightarrow$} \textbf{Uniquely identify a \emph{Network} in the \emph{Internet}}
+
+$\curarr$ \textbf{ IP Host Address $\Rightarrow$ Uniquely identify a \emph{Host} in a \emph{Network}}
+\item \begin{definition}{\textbf{Socket}\\}
+A Socket is the combination of the IP address ($\Rightarrow$ Network Layer) and the Port Number ($\Rightarrow$ Transport Layer).
+
+$\curarr$ It represent the \textbf{endpoint of each connection in the internet}: <IP,port>
+
+\end{definition}
+\item \begin{equation}
+\begin{cases}
+\text{ Street} \Longleftrightarrow \text{ IP Network Address}\\
+\text{ Building} \Longleftrightarrow \text{ IP Host Address}\\
+\text{ Apartment} \Longleftrightarrow \text{ Port Number}\\
+\text{ Person} \Longleftrightarrow \text{ One application per port number}
+\end{cases}
+\end{equation}
+\end{itemize}
+
+
+\section{Transport Service}
+There are two types of \emph{Transport Service Protocols}: TCP (Transmission Control Protocol) and UDP (User Data Protocol)
+
+\begin{itemize}
+\item TCP: 
+\begin{enumerate}
+\item \textbf{Connection-oriented transport service} $\Rightarrow$ Host-to-Host connectivity at the Transport Layer of the Internet Mode
+\item \textbf{A logical e2e connection is established between the sender and the receiver} processes and is \emph{full duplex}
+\item Each endpoint is identified by \emph{<IP,port>}
+\item The TCP connection is identified by the sockets of its endpoints
+\item 
+\begin{definition}{\textbf{TCP socket}\\}
+A TCP socket is a pair of sockets as <$IP_A$,$port_A$><$IP_B$,$port_B$>
+\end{definition}
+\item The Transmission Control Protocol provides a communication service at an intermediate level between an application program and the Internet Protocol.
+\item An application does not need to know the particular mechanisms for sending data via a link to another host, such as the required packet fragmentation on the transmission medium
+\item \textbf{At the transport layer} of the protocol stack $\Rightarrow$ TCP:
+\begin{enumerate}
+\item Handles all handshaking + transmission details
+\item Presents an abstraction of the network connection to the application
+\end{enumerate}
+\item \textbf{At the lower levels} of the protocol stack, $\Rightarrow$ due to \textit{network congestion, traffic load balancing, or other unpredictable network behaviour}, IP packets may be lost, duplicated, or delivered out of order $\Rightarrow$ TCP:
+\begin{enumerate}
+\item Detects these problems
+\item Requests re-transmission of lost data
+\item Rearranges out-of-order data 
+\item Helps minimize Network congestion to reduce the occurrence of the other problems
+\item If the data still remains undelivered the source is notified of this failure 
+\item Once the TCP receiver has reassembled the sequence of octets originally transmitted $\Rightarrow$ It passes them to the receiving application
+\item AT the end TCP abstracts the application's communication from the underlying networking details
+\end{enumerate}
+\end{enumerate}
+\item UDP:
+\begin{enumerate}
+\item Connectionless transport service
+\item There's \textbf{no logical e2e connection}
+\item Sender sends the packet to a receiver and that's it
+\item it suffices to specify the receiver socket $<IP,port>$
+\item
+\begin{definition}{\textbf{UDP Socket}\\}
+A UDP Socket is just purely <$IP_B$,$port_B$>
+\end{definition}
+\end{enumerate}
+\end{itemize}
+
+\section{Key points}
+\begin{equation}{\text{One Host}\rightarrow}
+\begin{cases}
+\text{ At least 1 IP address} \Rightarrow \text{\emph{A Host can have multiple IP addresses}}\\
+\text{ Multiple Processes} \Rightarrow \text{Each process is identified by one port number}
+\end{cases}
+\end{equation}
+\begin{equation}{\text{IP address}\rightarrow}
+\begin{cases}
+\text{\emph{IP address must be unique in the Network Domain}}\\
+\curarr \text{ 		Public Internet} \rightarrow \text{Globally unique IP address}\\
+\curarr \text{ 		Private Network} \rightarrow \text{Unique in the private network \textbf{only}}
+\end{cases}
+\end{equation}
+
+\begin{itemize}
+\item The connection is identified by one or more pairs \textit{<IP address,port number>} called \textbf{socket} which are \emph{unique in the network domain}.
+\item IP addresses uniquely identify network endpoints int the Internet, except in case of anycast routing
+	\begin{itemize}
+	\item A public IP address can be associated to  single network endpoint except in case of anycast routing\\$\curarr$
+Private IP addresses can be freely re-used in private networks, but cannot be used to route packet through the public Internet    
+    \item A single network endpoint can be associated to multiple IP addresses
+    \item Host connected to multiple networks \textbf{must} have multiple IP addresses
+	\end{itemize}
+\item Port numbers uniquely identify an application ina host
+\begin{itemize}
+\item Well-known port number are assigned to common applications
+\item other port numbers can be used to private applications
+\end{itemize}
+\item A socket \textit{<IP address,Port number>} uniquely identify an endpoint of a logical connection in Internet 
+\end{itemize}
+
+
